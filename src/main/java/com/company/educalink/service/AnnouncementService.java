@@ -1,0 +1,13 @@
+package com.company.educalink.service;
+
+import com.company.educalink.entity.Announcement;
+
+import java.util.List;
+
+public interface AnnouncementService {
+
+    Announcement saveCourse(Announcement announcement);
+    List<Announcement> getAll();
+    Announcement updateCourse(Long id, Announcement announcement);
+    void deleteById(Long id);
+}

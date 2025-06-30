@@ -1,9 +1,6 @@
 package com.company.educalink.exception.handler;
 
-import com.company.educalink.exception.custom.CourseNotFoundException;
-import com.company.educalink.exception.custom.GradeNotFoundException;
-import com.company.educalink.exception.custom.StudentNotFoundException;
-import com.company.educalink.exception.custom.TeacherNotFoundException;
+import com.company.educalink.exception.custom.*;
 import com.company.educalink.exception.dto.ErrorResponseDTO;
 import com.company.educalink.exception.dto.ValidationErrorDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -95,6 +92,38 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GradeNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handlerGradeNotFoundException(
             GradeNotFoundException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+    }
+
+    // Announcement doesn't found
+    @ExceptionHandler(AnnouncementNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerAnnouncementNotFoundException(
+            AnnouncementNotFoundException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+    }
+
+    // Publication doesn't found
+    @ExceptionHandler(PublicationNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerPublicationNotFoundException(
+            PublicationNotFoundException ex,
             HttpServletRequest request) {
 
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
