@@ -22,6 +22,7 @@ public class Course {
     @Min(value = 5, message = "The limit of students must be at least 5")
     private Integer limitStudents = 5;
 
+    /* Teacher */
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;

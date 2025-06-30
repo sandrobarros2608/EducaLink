@@ -19,6 +19,7 @@ public class Grade {
     @NotBlank(message = "The Grade Name is required")
     private String name;
 
+    /* Student */
     @OneToMany(mappedBy = "grade", cascade = CascadeType.ALL)
     // Break cycle
     @JsonIgnore

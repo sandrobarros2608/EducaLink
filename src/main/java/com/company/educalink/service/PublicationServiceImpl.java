@@ -1,8 +1,11 @@
 package com.company.educalink.service;
 
 import com.company.educalink.entity.Publication;
+import com.company.educalink.entity.Teacher;
 import com.company.educalink.exception.custom.PublicationNotFoundException;
+import com.company.educalink.exception.custom.TeacherNotFoundException;
 import com.company.educalink.repository.PublicationRepository;
+import com.company.educalink.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +18,16 @@ public class PublicationServiceImpl implements PublicationService {
     @Autowired
     private PublicationRepository publicationRepository;
 
+    // ManyToOne
+    @Autowired
+    private TeacherRepository teacherRepository;
+
     @Override
     public Publication savePublication(Publication publication) {
+        // Obtain the teacher
+        Teacher teacher = teacherRepository.findById(publication.getTeacher().getId())
+                .orElseThrow(() -> new TeacherNotFoundException(publication.getTeacher().getId()));
+
         return publicationRepository.save(publication);
     }
 
@@ -32,6 +43,10 @@ public class PublicationServiceImpl implements PublicationService {
 
         existingPublication.setTitle(publication.getTitle());
         existingPublication.setMessage(publication.getMessage());
+
+        // Obtain the teacher
+        Teacher teacher = teacherRepository.findById(publication.getTeacher().getId())
+                .orElseThrow(() -> new TeacherNotFoundException(publication.getTeacher().getId()));
         return publicationRepository.save(existingPublication);
     }
 

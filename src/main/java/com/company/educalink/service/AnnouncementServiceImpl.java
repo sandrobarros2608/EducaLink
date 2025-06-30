@@ -17,7 +17,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Autowired
     private AnnouncementRepository announcementRepository;
 
-    //ManyToOne
+    // ManyToOne
     @Autowired
     private TeacherRepository teacherRepository;
 
