@@ -23,6 +23,6 @@ public class Course {
     private Integer limitStudents = 5;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = true)
+    @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 }

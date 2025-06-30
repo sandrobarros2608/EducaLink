@@ -1,10 +1,8 @@
 package com.company.educalink.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -21,5 +19,8 @@ public class Announcement {
     @NotBlank(message = "The field Message is required")
     private String message;
 
-    // Teacher
+    @NotNull(message = "The Teacher is required")
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
 }

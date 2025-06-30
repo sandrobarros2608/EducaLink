@@ -19,7 +19,7 @@ public class AnnouncementController {
 
     @PostMapping
     public ResponseEntity<Announcement> saveAnnouncement(@Valid @RequestBody Announcement announcement) {
-        Announcement savedAnnouncement = announcementService.saveCourse(announcement);
+        Announcement savedAnnouncement = announcementService.saveAnnouncement(announcement);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAnnouncement);
     }
 
@@ -31,7 +31,7 @@ public class AnnouncementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Long id, @Valid @RequestBody Announcement announcement) {
-        Announcement updatedAnnouncement = announcementService.updateCourse(id, announcement);
+        Announcement updatedAnnouncement = announcementService.updateAnnouncement(id, announcement);
         return ResponseEntity.ok(updatedAnnouncement);
     }
 

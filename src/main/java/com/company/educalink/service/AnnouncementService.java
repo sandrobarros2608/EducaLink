@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface AnnouncementService {
 
-    Announcement saveCourse(Announcement announcement);
+    Announcement saveAnnouncement(Announcement announcement);
     List<Announcement> getAll();
-    Announcement updateCourse(Long id, Announcement announcement);
+    Announcement updateAnnouncement(Long id, Announcement announcement);
     void deleteById(Long id);
 }

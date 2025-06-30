@@ -41,4 +41,9 @@ public class Teacher {
     // Break cycle
     @JsonIgnore
     private List<Course> courses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    // Break cycle
+    @JsonIgnore
+    private List<Announcement> announcements = new ArrayList<>();
 }
