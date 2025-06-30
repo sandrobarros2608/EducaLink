@@ -135,4 +135,20 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
     }
+
+    // Comment doesn't found
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerCommentNotFoundException(
+            CommentNotFoundException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+    }
 }
