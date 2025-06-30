@@ -37,7 +37,6 @@ public class Teacher {
     @Size(min = 10, max = 10, message = "The Phone Number must contain 10 digits")
     private String phoneNumber;
 
-
     /* Course */
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     // Break cycle

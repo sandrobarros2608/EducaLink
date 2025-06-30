@@ -3,6 +3,7 @@ package com.company.educalink.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,4 +31,16 @@ public class Comment {
     @LastModifiedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime updatedAt;
+
+    /* Publication */
+    @NotNull(message = "The Publication is required")
+    @ManyToOne
+    @JoinColumn(name = "publication_id", nullable = false)
+    private Publication publication;
+
+    /* Student */
+    @NotNull(message = "The Student is required")
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 }

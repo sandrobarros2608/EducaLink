@@ -1,6 +1,7 @@
 package com.company.educalink.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -44,5 +47,9 @@ public class Publication {
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
-    // Comments
+    /* Comment */
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
+    // Break cycle
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
 }
