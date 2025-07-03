@@ -1,32 +1,50 @@
 package com.company.educalink.service;
 
 import com.company.educalink.entity.Qualification;
+import com.company.educalink.repository.QualificationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-public class QualificationServiceImpl implements  QualificationService {
+@Service
+public class QualificationServiceImpl implements QualificationService {
+
+    @Autowired
+    private QualificationRepository qualificationRepository;
+
     @Override
     public Qualification saveQualification(Qualification qualification) {
-        return null;
+        return qualificationRepository.save(qualification);
     }
 
     @Override
     public Qualification findById(Long id) {
-        return null;
+        return qualificationRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Qualification> getAll() {
-        return List.of();
+        return qualificationRepository.findAll();
     }
 
     @Override
     public Qualification updateQualification(Long id, Qualification qualification) {
+        Optional<Qualification> optional = qualificationRepository.findById(id);
+        if (optional.isPresent()) {
+            Qualification existing = optional.get();
+            existing.setScore(qualification.getScore());
+            existing.setFeedback(qualification.getFeedback());
+            existing.setEvaluationDate(qualification.getEvaluationDate());
+            existing.setSubmission(qualification.getSubmission());
+            return qualificationRepository.save(existing);
+        }
         return null;
     }
 
     @Override
     public void deleteById(Long id) {
-
+        qualificationRepository.deleteById(id);
     }
 }

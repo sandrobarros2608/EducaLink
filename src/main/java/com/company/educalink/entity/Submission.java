@@ -1,10 +1,21 @@
 package com.company.educalink.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Submission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,22 +28,22 @@ public class Submission {
     private LocalDate submissionDate;
 
     // Indica si el estudiante entregó a tiempo
-    private boolean submitted;
+    private boolean submitted = false;
 
     // Observaciones adicionales de la entrega
     private String comments;
-
-    // Relación con la tarea a la que corresponde la entrega
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "homework_id")
-    private Homework homework;
 
     // Relación con el estudiante que realizó la entrega
     @ManyToOne(optional = false)
     @JoinColumn(name = "student_id")
     private Student student;
 
-    // Relación uno a uno con la nota correspondiente a esta entrega
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "homework_id")
+    @JsonIgnoreProperties({"teacher", "course"})
+    private Homework homework;
+
     @OneToOne(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Qualification qualification;
 }

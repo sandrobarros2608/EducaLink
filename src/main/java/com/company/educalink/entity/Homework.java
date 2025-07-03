@@ -1,5 +1,7 @@
 package com.company.educalink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,6 +36,7 @@ public class Homework {
     private Teacher teacher; // Profesor que creó la tarea
 
     @OneToMany(mappedBy = "homework", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Submission> submissions; // Entregas relacionadas a esta tarea
+    @JsonIgnoreProperties("homework")
+    private List<Submission> submissions;
 }
 

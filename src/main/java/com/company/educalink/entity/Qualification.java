@@ -1,10 +1,20 @@
 package com.company.educalink.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Qualification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +29,8 @@ public class Qualification {
     // Fecha en la que se asignó la nota
     private LocalDate evaluationDate;
 
-    // Relación uno a uno con la entrega evaluada
     @OneToOne(optional = false)
     @JoinColumn(name = "submission_id", unique = true)
+    @JsonIgnoreProperties("qualification") // evita loop al serializar submission
     private Submission submission;
 }
