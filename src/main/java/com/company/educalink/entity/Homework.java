@@ -29,14 +29,11 @@ public class Homework {
 
     @ManyToOne
     @JoinColumn(name = "curso_id", nullable = false)
-    private Course course; // Curso al que pertenece la tarea
+    private Course course;
 
     @ManyToOne
     @JoinColumn(name = "profesor_id", nullable = false)
-    private Teacher teacher; // Profesor que creó la tarea
+    private Teacher teacher;
 
-    @OneToMany(mappedBy = "homework", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("homework")
-    private List<Submission> submissions;
 }
 

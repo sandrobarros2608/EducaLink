@@ -37,7 +37,7 @@ public class QualificationServiceImpl implements QualificationService {
             existing.setScore(qualification.getScore());
             existing.setFeedback(qualification.getFeedback());
             existing.setEvaluationDate(qualification.getEvaluationDate());
-            existing.setSubmission(qualification.getSubmission());
+            //existing.setSubmission(qualification.getSubmission());
             return qualificationRepository.save(existing);
         }
         return null;

@@ -14,7 +14,7 @@ public class SubmissionController {
     @Autowired
     private SubmissionService submissionService;
 
-    // Crear una nueva entrega
+
     @PostMapping
     public Submission createSubmission(@RequestBody Submission submission) {
         return submissionService.saveSubmission(submission);

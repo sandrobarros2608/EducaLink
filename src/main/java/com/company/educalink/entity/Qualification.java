@@ -27,10 +27,9 @@ public class Qualification {
     private String feedback;
 
     // Fecha en la que se asignó la nota
-    private LocalDate evaluationDate;
+    private LocalDate evaluationDate = LocalDate.now();
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "submission_id", unique = true)
-    @JsonIgnoreProperties("qualification") // evita loop al serializar submission
+    @JoinColumn(name = "submission_id", unique = true, nullable = false)
     private Submission submission;
 }

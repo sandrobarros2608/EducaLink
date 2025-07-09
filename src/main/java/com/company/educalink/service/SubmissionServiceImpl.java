@@ -39,7 +39,7 @@ public class SubmissionServiceImpl implements SubmissionService {
             existing.setSubmitted(submission.isSubmitted());
             existing.setComments(submission.getComments());
             existing.setHomework(submission.getHomework());
-            existing.setStudent(submission.getStudent());
+           // existing.setStudent(submission.getStudent());
             return submissionRepository.save(existing);
         }
         return null;
