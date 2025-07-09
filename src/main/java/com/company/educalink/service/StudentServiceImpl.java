@@ -17,7 +17,7 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    //ManyToOne
+    // ManyToOne
     @Autowired
     private GradeRepository gradeRepository;
 
