@@ -8,6 +8,7 @@ import com.company.educalink.repository.PublicationRepository;
 import com.company.educalink.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,11 +33,13 @@ public class PublicationServiceImpl implements PublicationService {
         return publicationRepository.save(publication);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Publication findById(Long id) {
         return publicationRepository.findById(id).orElseThrow(() -> new PublicationNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Publication> getAll() {
         return publicationRepository.findAll();

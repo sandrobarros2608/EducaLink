@@ -8,6 +8,7 @@ import com.company.educalink.repository.AnnouncementRepository;
 import com.company.educalink.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,11 +32,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return announcementRepository.save(announcement);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Announcement findById(Long id) {
         return announcementRepository.findById(id).orElseThrow(() -> new AnnouncementNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Announcement> getAll() {
         return announcementRepository.findAll();

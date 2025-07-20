@@ -8,6 +8,7 @@ import com.company.educalink.repository.CourseRepository;
 import com.company.educalink.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,11 +31,13 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.save(course);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Course findById(Long id) {
         return courseRepository.findById(id).orElseThrow(() -> new CourseNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Course> getAll() {
         return courseRepository.findAll();
