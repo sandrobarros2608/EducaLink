@@ -42,6 +42,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Comment findById(Long id) {
+        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
+    }
+
+    @Override
     public List<Comment> getAll() {
         return commentRepository.findAll();
     }

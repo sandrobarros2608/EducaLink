@@ -3,6 +3,7 @@ package com.company.educalink.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -23,6 +24,7 @@ public class Course {
     private Integer limitStudents = 5;
 
     /* Teacher */
+    @NotNull(message = "The Teacher is required")
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
