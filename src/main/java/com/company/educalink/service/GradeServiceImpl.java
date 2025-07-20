@@ -6,6 +6,7 @@ import com.company.educalink.repository.CourseRepository;
 import com.company.educalink.repository.GradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,11 +21,13 @@ public class GradeServiceImpl implements GradeService {
         return gradeRepository.save(grade);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Grade findById(Long id) {
         return gradeRepository.findById(id).orElseThrow(() -> new GradeNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Grade> getAll() {
         return gradeRepository.findAll();

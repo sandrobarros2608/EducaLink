@@ -11,6 +11,7 @@ import com.company.educalink.repository.PublicationRepository;
 import com.company.educalink.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -41,11 +42,13 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Comment findById(Long id) {
         return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Comment> getAll() {
         return commentRepository.findAll();
