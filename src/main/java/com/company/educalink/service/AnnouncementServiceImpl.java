@@ -32,6 +32,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    public Announcement findById(Long id) {
+        return announcementRepository.findById(id).orElseThrow(() -> new AnnouncementNotFoundException(id));
+    }
+
+    @Override
     public List<Announcement> getAll() {
         return announcementRepository.findAll();
     }
