@@ -28,7 +28,13 @@ public class PublicationServiceImpl implements PublicationService {
         Teacher teacher = teacherRepository.findById(publication.getTeacher().getId())
                 .orElseThrow(() -> new TeacherNotFoundException(publication.getTeacher().getId()));
 
+        publication.setTeacher(teacher);
         return publicationRepository.save(publication);
+    }
+
+    @Override
+    public Publication findById(Long id) {
+        return publicationRepository.findById(id).orElseThrow(() -> new PublicationNotFoundException(id));
     }
 
     @Override
@@ -47,6 +53,7 @@ public class PublicationServiceImpl implements PublicationService {
         // Obtain the teacher
         Teacher teacher = teacherRepository.findById(publication.getTeacher().getId())
                 .orElseThrow(() -> new TeacherNotFoundException(publication.getTeacher().getId()));
+        existingPublication.setTeacher(teacher);
         return publicationRepository.save(existingPublication);
     }
 
