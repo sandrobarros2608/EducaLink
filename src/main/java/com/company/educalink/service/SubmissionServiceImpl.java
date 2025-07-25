@@ -1,6 +1,7 @@
 package com.company.educalink.service;
 
 import com.company.educalink.entity.Submission;
+import com.company.educalink.exception.custom.ResourceNotFoundException;
 import com.company.educalink.repository.SubmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public Submission findById(Long id) {
-        return submissionRepository.findById(id).orElse(null);
+        return submissionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Submission.class, id));
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.company.educalink.service;
 
+import com.company.educalink.entity.Course;
 import com.company.educalink.entity.Homework;
+import com.company.educalink.exception.custom.ResourceNotFoundException;
 import com.company.educalink.repository.HomeworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public Homework findById(Long id) {
         return homeworkRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Homework not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(Homework.class, id));
     }
 
     @Override
@@ -33,7 +35,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public Homework updateHomework(Long id, Homework homework) {
         Homework existingHomework = homeworkRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Homework not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(Homework.class, id));
 
         existingHomework.setTitle(homework.getTitle());
         existingHomework.setDescription(homework.getDescription());
@@ -46,7 +48,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public void deleteById(Long id) {
         Homework existingHomework = homeworkRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Homework not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(Homework.class, id));
 
         homeworkRepository.delete(existingHomework);
     }

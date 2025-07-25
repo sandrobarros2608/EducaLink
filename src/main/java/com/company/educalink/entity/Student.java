@@ -39,15 +39,15 @@ public class Student implements Nameable {
     @Size(min = 10, max = 10, message = "The Phone Number must contain 10 digits")
     private String phoneNumber;
 
-    /* Grade */
+    /* ManyToOne with Grade. */
     @NotNull(message = "The Grade is required")
     @ManyToOne
     @JoinColumn(name = "grade_id", nullable = false)
     private Grade grade;
 
-    /* Comment */
+    /* OneToMany with Comment. */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    // Break cycle
+    // Break cycle.
     @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 }

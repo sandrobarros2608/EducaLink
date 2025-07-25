@@ -38,21 +38,21 @@ public class Teacher implements Nameable {
     @Size(min = 10, max = 10, message = "The Phone Number must contain 10 digits")
     private String phoneNumber;
 
-    /* Course */
+    /* OneToMany with Course. */
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    // Break cycle
+    // Break cycle.
     @JsonIgnore
     private List<Course> courses = new ArrayList<>();
 
-    /* Announcement */
+    /* OneToMany with Announcement. */
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    // Break cycle
+    // Break cycle.
     @JsonIgnore
     private List<Announcement> announcements = new ArrayList<>();
 
-    /* Publication */
+    /* OneToMany with Publication. */
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    // Break cycle
+    // Break cycle.
     @JsonIgnore
     private List<Publication> publications = new ArrayList<>();
 }
