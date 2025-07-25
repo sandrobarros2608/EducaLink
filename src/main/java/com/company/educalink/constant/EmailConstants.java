@@ -18,4 +18,7 @@ public class EmailConstants {
             "Sincerely,\n" +
             "\n" +
             "The EducaLink Team";
+    public static final String EMAIL_TEMPLATE_REGISTRATION_PATH = "templates/email/EmailRegistrationText.html";
+    public static final String EMAIL_LOGO_PATH = "static/images/educalinklogo.png";
+    public static final String EMAIL_LOGO_CONTENT_ID = "educalinkLogo";
 }

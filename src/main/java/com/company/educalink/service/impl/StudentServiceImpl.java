@@ -145,7 +145,7 @@ public class StudentServiceImpl implements GenericService<Student, Long> {
     public void sendWelcomeEmail(Student student) {
         Map<String, String> placeholders = EmailTemplateUtil.buildPlaceholders(student);
 
-        String htmlTemplate = EmailTemplateUtil.loadTemplate("templates/email/EmailRegistrationText.html");
+        String htmlTemplate = EmailTemplateUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_REGISTRATION_PATH);
 
         String formattedText = EmailTemplateUtil.formatRegisterName(
                 htmlTemplate,

@@ -124,7 +124,7 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
     public void sendWelcomeEmail(Teacher teacher) {
         Map<String, String> placeholders = EmailTemplateUtil.buildPlaceholders(teacher);
 
-        String htmlTemplate = EmailTemplateUtil.loadTemplate("templates/email/EmailRegistrationText.html");
+        String htmlTemplate = EmailTemplateUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_REGISTRATION_PATH);
 
         String formattedText = EmailTemplateUtil.formatRegisterName(
                 htmlTemplate,
