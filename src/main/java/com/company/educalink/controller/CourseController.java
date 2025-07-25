@@ -1,7 +1,7 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Course;
-import com.company.educalink.service.CourseService;
+import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller in charge of managing Courses. Allows you to create, consult and delete courses associated with teachers.
+ * REST controller for managing {@link Course} resources.
+ * <p>
+ * Provides endpoints to create, retrieve, update, and delete courses associated with teachers.
+ * </p>
  *
  * @author Sandro Barros
  * @since 1.0.0
@@ -24,72 +27,76 @@ import java.util.List;
 public class    CourseController {
 
     /**
-     * Exposing the service methods through dependency injection for use in other layers of the application.
+     * Injected service to handle course operations.
      */
     @Autowired
-    private CourseService courseService;
+    private GenericService<Course, Long> genericService;
 
     /**
-     * Create course. Before a course can be created, a teacher must exist.
+     * Creates a new course.
+     * <p>
+     * A valid teacher must exist before a course can be created.
+     * </p>
      *
-     * @param course
-     * @return Response 201 returning the created object.
+     * @param course the course to create
+     * @return HTTP 201 with the created course
      */
-    @Operation(summary = "Create course.", description = "Before a course can be created, a teacher must exist.")
+    @Operation(summary = "Create a new course", description = "Creates a new course associated with an existing teacher.")
     @PostMapping
     public ResponseEntity<Course> saveCourse(@Valid @RequestBody Course course) {
-        Course savedCourse = courseService.saveCourse(course);
+        Course savedCourse = genericService.save(course);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCourse);
     }
 
     /**
-     * Get course by id. You can obtain a specific course.
+     * Retrieves a course by its ID.
      *
-     * @return Response 200 you can obtain a specific course.
+     * @param id the ID of the course
+     * @return HTTP 200 with the found course
      */
-    @Operation(summary = "Get course by id.", description = "You can obtain a specific course.")
+    @Operation(summary = "Retrieve a course by ID", description = "Fetches a specific course by its ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Course> findById(@PathVariable Long id) {
-        Course courseId = courseService.findById(id);
+        Course courseId = genericService.findById(id);
         return ResponseEntity.ok(courseId);
     }
 
     /**
-     * Get list of courses. Gets all courses without pagination.
+     * Retrieves all courses.
      *
-     * @return Response 200 returning a list of course.
+     * @return HTTP 200 with a list of all courses
      */
-    @Operation(summary = "Get list of courses.", description = "Gets all courses without pagination.")
+    @Operation(summary = "Retrieve all courses", description = "Fetches all courses without pagination.")
     @GetMapping
     public ResponseEntity<List<Course>> getAll() {
-        List<Course> courseList = courseService.getAll();
+        List<Course> courseList = genericService.getAll();
         return ResponseEntity.ok(courseList);
     }
 
     /**
-     * Update course. The courses can be updated without any problem.
+     * Updates an existing course.
      *
-     * @param id
-     * @param course
-     * @return Response 200 returning the updated course.
+     * @param id the ID of the course to update
+     * @param course the updated course data
+     * @return HTTP 200 with the updated course
      */
-    @Operation(summary = "Update course.", description = "The courses can be updated without any problem.")
+    @Operation(summary = "Update a course", description = "Updates a specific course by its ID.")
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable Long id, @Valid @RequestBody Course course) {
-        Course updatedCourse = courseService.updateCourse(id, course);
+        Course updatedCourse = genericService.update(id, course);
         return ResponseEntity.ok(updatedCourse);
     }
 
     /**
-     * Delete course. You can delete course without any problem.
+     * Deletes a course by its ID.
      *
-     * @param id
-     * @return Response 204 returning nothing.
+     * @param id the ID of the course to delete
+     * @return HTTP 204 No Content
      */
-    @Operation(summary = "Delete course.", description = "You can delete course without any problem.")
+    @Operation(summary = "Delete a course", description = "Deletes a specific course by its ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        courseService.deleteById(id);
+        genericService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

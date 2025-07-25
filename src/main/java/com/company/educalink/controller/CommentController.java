@@ -1,7 +1,7 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Comment;
-import com.company.educalink.service.CommentService;
+import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller in charge of managing Comments. Allows you to create, consult and delete comments associated with students.
+ * REST controller for managing {@link Comment} resources.
+ * <p>
+ * Provides endpoints to create, retrieve, update, and delete comments associated with students and publications.
+ * </p>
  *
  * @author Sandro Barros
  * @since 1.0.0
@@ -24,73 +27,76 @@ import java.util.List;
 public class CommentController {
 
     /**
-     * Exposing the service methods through dependency injection for use in other layers of the application.
+     * Injected service to handle comment operations.
      */
     @Autowired
-    private CommentService commentService;
+    private GenericService<Comment, Long> genericService;
 
     /**
-     * Create comment. Before a comment can be created, a student must exist.
+     * Creates a new comment.
+     * <p>
+     * A valid student and publication must exist before a comment can be created.
+     * </p>
      *
-     * @param comment
-     * @return Response 201 returning the created object.
+     * @param comment the comment to create
+     * @return HTTP 201 with the created comment
      */
-    @Operation(summary = "Create comment.", description = "Before a comment can be created, a student must exist.")
+    @Operation(summary = "Create a new comment", description = "Creates a comment associated with an existing student and publication.")
     @PostMapping
     public ResponseEntity<Comment> saveComment(@Valid @RequestBody Comment comment) {
-        Comment savedComment = commentService.saveComment(comment);
+        Comment savedComment = genericService.save(comment);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }
 
     /**
-     * Get comment by id. You can obtain a specific comment.
+     * Retrieves a comment by its ID.
      *
-     * @param id
-     * @return Response 200 returning the object.
+     * @param id the ID of the comment
+     * @return HTTP 200 with the found comment
      */
-    @Operation(summary = "Get comment by id.", description = "You can obtain a specific comment.")
+    @Operation(summary = "Retrieve a comment by ID", description = "Fetches a specific comment by its ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Comment> findById(@PathVariable Long id) {
-        Comment commentId = commentService.findById(id);
+        Comment commentId = genericService.findById(id);
         return ResponseEntity.ok(commentId);
     }
 
     /**
-     * Get list of comments. Gets all comments without pagination.
+     * Retrieves all comments.
      *
-     * @return Response 200 returning a list of comment.
+     * @return HTTP 200 with a list of all comments
      */
-    @Operation(summary = "Get list of comments.", description = "Gets all comments without pagination.")
+    @Operation(summary = "Retrieve all comments", description = "Fetches all comments without pagination.")
     @GetMapping
     public ResponseEntity<List<Comment>> getAll() {
-        List<Comment> commentList = commentService.getAll();
+        List<Comment> commentList = genericService.getAll();
         return ResponseEntity.ok(commentList);
     }
 
     /**
-     * Update comment. The comments can be updated without any problem.
+     * Updates an existing comment.
      *
-     * @param id
-     * @param comment
-     * @return Response 200 returning the updated comment.
+     * @param id the ID of the comment to update
+     * @param comment the updated comment data
+     * @return HTTP 200 with the updated comment
      */
-    @Operation(summary = "Update comment.", description = "The comments can be updated without any problem.")
+    @Operation(summary = "Update a comment", description = "Updates a specific comment by its ID.")
     @PutMapping("/{id}")
     public ResponseEntity<Comment> updateComment(@PathVariable Long id, @Valid @RequestBody Comment comment) {
-        Comment updatedComment = commentService.updateComment(id, comment);
+        Comment updatedComment = genericService.update(id, comment);
         return ResponseEntity.ok(updatedComment);
     }
 
     /**
-     * Delete comment. You can delete comment without any problem.
+     * Deletes a comment by its ID.
      *
-     * @param id
-     * @return Response 204 returning nothing.
+     * @param id the ID of the comment to delete
+     * @return HTTP 204 No Content
      */
-    @Operation(summary = "Delete comment.", description = "You can delete comment without any problem.")
+    @Operation(summary = "Delete a comment", description = "Deletes a specific comment by its ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        commentService.deleteById(id);
+        genericService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

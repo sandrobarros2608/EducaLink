@@ -1,7 +1,7 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Grade;
-import com.company.educalink.service.GradeService;
+import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller in charge of managing Grades. Allows you to create, consult and delete grades.
+ * REST controller for managing Grade entities.
+ * <p>
+ * Provides endpoints for creating, retrieving, updating, and deleting grades.
+ * </p>
  *
  * @author Sandro Barros
  * @since 1.0.0
@@ -24,72 +27,73 @@ import java.util.List;
 public class GradeController {
 
     /**
-     * Exposing the service methods through dependency injection for use in other layers of the application.
+     * Generic service for handling grade operations.
      */
     @Autowired
-    private GradeService gradeService;
+    private GenericService<Grade, Long> genericService;
 
     /**
-     * Create grade. The grade can be created without any problems.
+     * Creates a new grade.
      *
-     * @param grade
-     * @return Response 201 returning the created object.
+     * @param grade the grade to be created
+     * @return HTTP 201 with the created grade
      */
-    @Operation(summary = "Create grade.", description = "The grade can be created without any problems.")
+    @Operation(summary = "Create a grade", description = "Creates a new grade entity.")
     @PostMapping
     public ResponseEntity<Grade> saveGrade(@Valid @RequestBody Grade grade) {
-        Grade savedGrade = gradeService.saveGrade(grade);
+        Grade savedGrade = genericService.save(grade);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedGrade);
     }
 
     /**
-     * Get grade by id. You can obtain a specific grade.
+     * Retrieves a grade by its ID.
      *
-     * @return Response 200 you can obtain a specific grade.
+     * @param id the ID of the grade
+     * @return HTTP 200 with the grade if found
      */
-    @Operation(summary = "Get grade by id.", description = "You can obtain a specific grade.")
+    @Operation(summary = "Get grade by ID", description = "Retrieves a specific grade by its ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Grade> findById(@PathVariable Long id) {
-        Grade gradeId = gradeService.findById(id);
+        Grade gradeId = genericService.findById(id);
         return ResponseEntity.ok(gradeId);
     }
 
     /**
-     * Get list of grades. Gets all grades without pagination.
+     * Retrieves all grades.
      *
-     * @return Response 200 returning a list of grade.
+     * @return HTTP 200 with a list of all grades
      */
-    @Operation(summary = "Get list of grades.", description = "Gets all grades without pagination.")
+    @Operation(summary = "Get all grades", description = "Retrieves a list of all grades.")
     @GetMapping
     public ResponseEntity<List<Grade>> getAll() {
-        List<Grade> gradeList = gradeService.getAll();
+        List<Grade> gradeList = genericService.getAll();
         return ResponseEntity.ok(gradeList);
     }
 
     /**
-     * Update grade. The grades can be updated without any problem.
+     * Updates an existing grade.
      *
-     * @param id
-     * @param grade
-     * @return Response 200 returning the updated grade.
+     * @param id the ID of the grade to update
+     * @param grade the updated grade data
+     * @return HTTP 200 with the updated grade
      */
-    @Operation(summary = "Update grade.", description = "The grades can be updated without any problem.")
+    @Operation(summary = "Update a grade", description = "Updates the information of an existing grade.")
     @PutMapping("/{id}")
     public ResponseEntity<Grade> updateGrade(@PathVariable Long id, @Valid @RequestBody Grade grade) {
-        Grade updatedGrade = gradeService.updateGrade(id, grade);
+        Grade updatedGrade = genericService.update(id, grade);
         return ResponseEntity.ok(updatedGrade);
     }
 
     /**
-     * Delete grade. You can delete grade without any problem.
+     * Deletes a grade by its ID.
      *
-     * @param id
-     * @return Response 204 returning nothing.
+     * @param id the ID of the grade to delete
+     * @return HTTP 204 with no content
      */
-    @Operation(summary = "Delete grade.", description = "You can delete grade without any problem.")
+    @Operation(summary = "Delete a grade", description = "Deletes a grade by its ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        gradeService.deleteById(id);
+        genericService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

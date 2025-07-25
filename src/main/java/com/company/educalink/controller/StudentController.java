@@ -1,7 +1,7 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Student;
-import com.company.educalink.service.StudentService;
+import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,84 +13,91 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller in charge of managing Students. Allows you to create, consult and delete students.
+ * REST controller for managing Student entities.
+ * <p>
+ * Provides endpoints for creating, retrieving, updating, and deleting students.
+ * </p>
+ * A grade must exist before creating a student.
  *
  * @author Sandro Barros
  * @since 1.0.0
  */
-@Tag(name = "Students", description = "Endpoints for managing Students")
+@Tag(name = "Students", description = "Endpoints for managing students")
 @RestController
 @RequestMapping("/api/student")
 public class StudentController {
 
     /**
-     * Exposing the service methods through dependency injection for use in other layers of the application.
+     * Generic service used to perform operations on Student entities.
      */
     @Autowired
-    private StudentService studentService;
+    private GenericService<Student, Long> genericService;
 
     /**
-     * Create student. Before a student can be created, a grade must exist.
+     * Creates a new student.
+     * <p>
+     * A grade must exist before a student can be created.
+     * </p>
      *
-     * @param student
-     * @return Response 201 returning the created object.
+     * @param student the student to be created
+     * @return HTTP 201 with the created student
      */
-    @Operation(summary = "Create student.", description = "Before a student can be created, a grade must exist.")
+    @Operation(summary = "Create a student", description = "Creates a new student. A grade must exist beforehand.")
     @PostMapping
     public ResponseEntity<Student> saveStudent(@Valid @RequestBody Student student) {
-        Student savedStudent = studentService.saveStudent(student);
+        Student savedStudent = genericService.save(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }
 
     /**
-     * Get student by id. You can obtain a specific student.
+     * Retrieves a student by ID.
      *
-     * @param id
-     * @return Response 200 returning the object.
+     * @param id the ID of the student
+     * @return HTTP 200 with the student if found
      */
-    @Operation(summary = "Get student by id.", description = "You can obtain a specific student.")
+    @Operation(summary = "Get student by ID", description = "Retrieves a specific student by their ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Student> findById(@PathVariable Long id) {
-        Student studentId = studentService.findById(id);
+        Student studentId = genericService.findById(id);
         return ResponseEntity.ok(studentId);
     }
 
     /**
-     * Get list of students. Gets all students without pagination.
+     * Retrieves all students.
      *
-     * @return Response 200 returning a list of students.
+     * @return HTTP 200 with a list of all students
      */
-    @Operation(summary = "Get list of students.", description = "Gets all students without pagination.")
+    @Operation(summary = "Get all students", description = "Retrieves a list of all students without pagination.")
     @GetMapping
     public ResponseEntity<List<Student>> getAll() {
-        List<Student> studentList = studentService.getAll();
+        List<Student> studentList = genericService.getAll();
         return ResponseEntity.ok(studentList);
     }
 
     /**
-     * Update student. The students can be updated without any problem.
+     * Updates an existing student.
      *
-     * @param id
-     * @param student
-     * @return Response 200 returning the updated student.
+     * @param id the ID of the student to update
+     * @param student the updated student data
+     * @return HTTP 200 with the updated student
      */
-    @Operation(summary = "Update student.", description = "The students can be updated without any problem.")
+    @Operation(summary = "Update a student", description = "Updates the information of an existing student.")
     @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(@Valid @PathVariable Long id, @RequestBody Student student) {
-        Student updatedStudent = studentService.updateStudent(id, student);
+        Student updatedStudent = genericService.update(id, student);
         return ResponseEntity.ok(updatedStudent);
     }
 
     /**
-     * Delete student. You can delete student without any problem.
+     * Deletes a student by ID.
      *
-     * @param id
-     * @return Response 204 returning nothing.
+     * @param id the ID of the student to delete
+     * @return HTTP 204 with no content
      */
-    @Operation(summary = "Delete student.", description = "You can delete student without any problem.")
+    @Operation(summary = "Delete a student", description = "Deletes a student by their ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        studentService.deleteById(id);
+        genericService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

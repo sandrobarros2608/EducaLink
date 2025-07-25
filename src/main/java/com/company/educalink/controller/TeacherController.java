@@ -1,7 +1,7 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Teacher;
-import com.company.educalink.service.TeacherService;
+import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller in charge of managing teachers. Allows you to create, consult and delete teachers.
+ * REST controller for managing Teacher entities.
+ * <p>
+ * Provides endpoints for creating, retrieving, updating, and deleting teachers.
+ * </p>
  *
  * @author Sandro Barros
  * @since 1.0.0
@@ -24,73 +27,73 @@ import java.util.List;
 public class TeacherController {
 
     /**
-     * Exposing the service methods through dependency injection for use in other layers of the application.
+     * Generic service used to perform operations on Teacher entities.
      */
     @Autowired
-    private TeacherService teacherService;
+    private GenericService<Teacher, Long> genericService;
 
     /**
-     * Create teacher. The teacher can be created without any problems.
+     * Creates a new teacher.
      *
-     * @param teacher
-     * @return Response 201 returning the created object.
+     * @param teacher the teacher to be created
+     * @return HTTP 201 with the created teacher
      */
-    @Operation(summary = "Create teacher.", description = "The teacher can be created without any problems.")
+    @Operation(summary = "Create a teacher", description = "Creates a new teacher.")
     @PostMapping
     public ResponseEntity<Teacher> saveTeacher(@Valid @RequestBody Teacher teacher) {
-        Teacher savedTeacher = teacherService.saveTeacher(teacher);
+        Teacher savedTeacher = genericService.save(teacher);
         return ResponseEntity.status(HttpStatus.CREATED).body(teacher);
     }
 
     /**
-     * Get teacher by id. You can obtain a specific teacher.
+     * Retrieves a teacher by ID.
      *
-     * @param id
-     * @return Response 200 returning the object.
+     * @param id the ID of the teacher
+     * @return HTTP 200 with the teacher if found
      */
-    @Operation(summary = "Get teacher by id.", description = "You can obtain a specific teacher.")
+    @Operation(summary = "Get teacher by ID", description = "Retrieves a specific teacher by their ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Teacher> findById(@PathVariable Long id) {
-        Teacher teacherId = teacherService.findById(id);
+        Teacher teacherId = genericService.findById(id);
         return ResponseEntity.ok(teacherId);
     }
 
     /**
-     * Get list of teachers. Gets all teachers without pagination.
+     * Retrieves all teachers.
      *
-     * @return Response 200 returning a list of teachers.
+     * @return HTTP 200 with a list of all teachers
      */
-    @Operation(summary = "Get list of teachers.", description = "Gets all teachers without pagination.")
+    @Operation(summary = "Get all teachers", description = "Retrieves a list of all teachers without pagination.")
     @GetMapping
     public ResponseEntity<List<Teacher>> getAll() {
-        List<Teacher> teacherList = teacherService.getAll();
+        List<Teacher> teacherList = genericService.getAll();
         return ResponseEntity.ok(teacherList);
     }
 
     /**
-     * Update teacher. The teachers can be updated without any problem.
+     * Updates an existing teacher.
      *
-     * @param id
-     * @param teacher
-     * @return Response 200 returning the updated teacher.
+     * @param id the ID of the teacher to update
+     * @param teacher the updated teacher data
+     * @return HTTP 200 with the updated teacher
      */
-    @Operation(summary = "Update teacher.", description = "The teachers can be updated without any problem.")
+    @Operation(summary = "Update a teacher", description = "Updates the information of an existing teacher.")
     @PutMapping("/{id}")
     public ResponseEntity<Teacher> updateTeacher(@Valid @PathVariable Long id, @RequestBody Teacher teacher) {
-        Teacher updatedTeacher = teacherService.updateTeacher(id, teacher);
+        Teacher updatedTeacher = genericService.update(id, teacher);
         return ResponseEntity.ok(updatedTeacher);
     }
 
     /**
-     * Delete teacher. You can delete teacher without any problem.
+     * Deletes a teacher by ID.
      *
-     * @param id
-     * @return Response 204 returning nothing.
+     * @param id the ID of the teacher to delete
+     * @return HTTP 204 with no content
      */
-    @Operation(summary = "Delete teacher.", description = "You can delete teacher without any problem.")
+    @Operation(summary = "Delete a teacher", description = "Deletes a teacher by their ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        teacherService.deleteById(id);
+        genericService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

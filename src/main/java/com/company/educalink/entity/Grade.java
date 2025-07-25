@@ -19,9 +19,9 @@ public class Grade {
     @NotBlank(message = "The Grade Name is required")
     private String name;
 
-    /* Student */
+    /* OneToMany with Student. */
     @OneToMany(mappedBy = "grade", cascade = CascadeType.ALL)
-    // Break cycle
+    // Break cycle.
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
 }

@@ -42,15 +42,15 @@ public class Publication {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime updatedAt;
 
-    /* Teacher */
+    /* ManyToOne with Teacher. */
     @NotNull(message = "The Teacher is required")
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
-    /* Comment */
+    /* OneToMany with Comment. */
     @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
-    // Break cycle
+    // Break cycle.
     @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 }

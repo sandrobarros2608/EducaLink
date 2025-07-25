@@ -1,6 +1,7 @@
 package com.company.educalink.service;
 
 import com.company.educalink.entity.Qualification;
+import com.company.educalink.exception.custom.ResourceNotFoundException;
 import com.company.educalink.repository.QualificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class QualificationServiceImpl implements QualificationService {
 
     @Override
     public Qualification findById(Long id) {
-        return qualificationRepository.findById(id).orElse(null);
+        return qualificationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Qualification.class, id));
     }
 
     @Override
