@@ -35,6 +35,7 @@ public class Announcement {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime updatedAt;
 
+    /* ManyToOne with Teacher. */
     @NotNull(message = "The Teacher is required")
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)

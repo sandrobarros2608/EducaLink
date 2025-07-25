@@ -14,10 +14,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Global exception handler for managing and formatting custom error responses
+ * across the entire application.
+ * <p>
+ * Handles validation errors, not found resources, and duplicate email cases, returning
+ * structured JSON responses for better client-side handling.
+ * </p>
+ *
+ * @author Sandro Barros
+ * @since 1.0.0
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handling validation errors
+    /**
+     * Handles validation errors thrown by @Valid annotated request bodies.
+     *
+     * @param ex      the MethodArgumentNotValidException containing validation errors
+     * @param request the HTTP request
+     * @return a ResponseEntity with status 400 (Bad Request) and a structured error response
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handlerMethodArgumentNotValidException(
             MethodArgumentNotValidException ex,
@@ -40,10 +57,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }
 
-    // Teacher doesn't found
-    @ExceptionHandler(TeacherNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerTeacherNotFoundException(
-            TeacherNotFoundException ex,
+    /**
+     * Handles cases where a requested resource was not found in the system.
+     *
+     * @param ex      the ResourceNotFoundException thrown
+     * @param request the HTTP request
+     * @return a ResponseEntity with status 404 (Not Found) and a structured error response
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerResourceNotFoundException(
+            ResourceNotFoundException ex,
             HttpServletRequest request) {
 
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
@@ -53,102 +76,29 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 null
         );
+
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
     }
 
-    // Student doesn't found
-    @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerStudentNotFoundException(
-            StudentNotFoundException ex,
+    /**
+     * Handles cases where the provided email already exists in the database.
+     *
+     * @param ex      the DuplicateEmailException thrown
+     * @param request the HTTP request
+     * @return a ResponseEntity with status 409 (Conflict) and a structured error response
+     */
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerDuplicateEmailException(
+            DuplicateEmailException ex,
             HttpServletRequest request) {
 
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
                 LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.CONFLICT.value(),
                 ex.getMessage(),
                 request.getRequestURI(),
                 null
         );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
-    }
-
-    // Course doesn't found
-    @ExceptionHandler(CourseNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerCourseNotFoundException(
-            CourseNotFoundException ex,
-            HttpServletRequest request) {
-
-        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                request.getRequestURI(),
-                null
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
-    }
-
-    // Grade doesn't found
-    @ExceptionHandler(GradeNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerGradeNotFoundException(
-            GradeNotFoundException ex,
-            HttpServletRequest request) {
-
-        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                request.getRequestURI(),
-                null
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
-    }
-
-    // Announcement doesn't found
-    @ExceptionHandler(AnnouncementNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerAnnouncementNotFoundException(
-            AnnouncementNotFoundException ex,
-            HttpServletRequest request) {
-
-        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                request.getRequestURI(),
-                null
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
-    }
-
-    // Publication doesn't found
-    @ExceptionHandler(PublicationNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerPublicationNotFoundException(
-            PublicationNotFoundException ex,
-            HttpServletRequest request) {
-
-        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                request.getRequestURI(),
-                null
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
-    }
-
-    // Comment doesn't found
-    @ExceptionHandler(CommentNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerCommentNotFoundException(
-            CommentNotFoundException ex,
-            HttpServletRequest request) {
-
-        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                request.getRequestURI(),
-                null
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
     }
 }

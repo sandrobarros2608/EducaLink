@@ -1,7 +1,7 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Announcement;
-import com.company.educalink.service.AnnouncementService;
+import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Controller in charge of managing Announcements. Allows you to create, consult and delete announcements associated with teachers.
+ * REST controller for managing {@link Announcement} resources.
+ * <p>
+ * Provides endpoints to create, retrieve, update, and delete announcements associated with teachers.
+ * </p>
  *
  * @author Sandro Barros
  * @since 1.0.0
@@ -24,73 +27,76 @@ import java.util.List;
 public class AnnouncementController {
 
     /**
-     * Exposing the service methods through dependency injection for use in other layers of the application.
+     * Injected service to handle announcement operations.
      */
     @Autowired
-    private AnnouncementService announcementService;
+    private GenericService<Announcement, Long> genericService;
 
     /**
-     * Create announcement. Before a announcement can be created, a teacher must exist.
+     * Creates a new announcement.
+     * <p>
+     * A valid teacher must exist before an announcement can be created.
+     * </p>
      *
-     * @param announcement
-     * @return Response 201 returning the created object.
+     * @param announcement the announcement to create
+     * @return HTTP 201 with the created announcement
      */
-    @Operation(summary = "Create announcement.", description = "Before a announcement can be created, a teacher must exist.")
+    @Operation(summary = "Create a new announcement", description = "Creates an announcement associated with an existing teacher.")
     @PostMapping
     public ResponseEntity<Announcement> saveAnnouncement(@Valid @RequestBody Announcement announcement) {
-        Announcement savedAnnouncement = announcementService.saveAnnouncement(announcement);
+        Announcement savedAnnouncement = genericService.save(announcement);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAnnouncement);
     }
 
     /**
-     * Get announcement by id. You can obtain a specific announcement.
+     * Retrieves an announcement by its ID.
      *
-     * @param id
-     * @return Response 200 returning the object.
+     * @param id the ID of the announcement
+     * @return HTTP 200 with the found announcement
      */
-    @Operation(summary = "Get announcement by id.", description = "You can obtain a specific announcement.")
+    @Operation(summary = "Retrieve an announcement by ID", description = "Fetches a specific announcement by its ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Announcement> findById(@PathVariable Long id) {
-        Announcement announcementId = announcementService.findById(id);
+        Announcement announcementId = genericService.findById(id);
         return ResponseEntity.ok(announcementId);
     }
 
     /**
-     * Get list of announcements. Gets all announcement without pagination.
+     * Retrieves all announcements.
      *
-     * @return Response 200 returning a list of announcement.
+     * @return HTTP 200 with a list of all announcements
      */
-    @Operation(summary = "Get list of announcement.", description = "Gets all announcement without pagination.")
+    @Operation(summary = "Retrieve all announcements", description = "Fetches all announcements without pagination.")
     @GetMapping
     public ResponseEntity<List<Announcement>> getAll() {
-        List<Announcement> announcementList = announcementService.getAll();
+        List<Announcement> announcementList = genericService.getAll();
         return ResponseEntity.ok(announcementList);
     }
 
     /**
-     * Update announcement. The announcements can be updated without any problem.
+     * Updates an existing announcement.
      *
-     * @param id
-     * @param announcement
-     * @return Response 200 returning the updated announcement.
+     * @param id the ID of the announcement to update
+     * @param announcement the updated announcement data
+     * @return HTTP 200 with the updated announcement
      */
-    @Operation(summary = "Update announcement.", description = "The announcements can be updated without any problem.")
+    @Operation(summary = "Update an existing announcement", description = "Updates a specific announcement by its ID.")
     @PutMapping("/{id}")
     public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Long id, @Valid @RequestBody Announcement announcement) {
-        Announcement updatedAnnouncement = announcementService.updateAnnouncement(id, announcement);
+        Announcement updatedAnnouncement = genericService.update(id, announcement);
         return ResponseEntity.ok(updatedAnnouncement);
     }
 
     /**
-     * Delete announcement. You can delete announcement without any problem.
+     * Deletes an announcement by its ID.
      *
-     * @param id
-     * @return Response 204 returning nothing.
+     * @param id the ID of the announcement to delete
+     * @return HTTP 204 No Content
      */
-    @Operation(summary = "Delete announcement.", description = "You can delete announcement without any problem.")
+    @Operation(summary = "Delete an announcement", description = "Deletes a specific announcement by its ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        announcementService.deleteById(id);
+        genericService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

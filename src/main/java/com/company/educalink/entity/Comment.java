@@ -32,13 +32,13 @@ public class Comment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime updatedAt;
 
-    /* Publication */
+    /* ManyToOne with Publication. */
     @NotNull(message = "The Publication is required")
     @ManyToOne
     @JoinColumn(name = "publication_id", nullable = false)
     private Publication publication;
 
-    /* Student */
+    /* ManyToOne with Student. */
     @NotNull(message = "The Student is required")
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
