@@ -50,8 +50,8 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
-            ClassPathResource image = new ClassPathResource("static/images/educalinklogo.png");
-            helper.addInline("educalinkLogo", image);
+            ClassPathResource image = new ClassPathResource(EmailConstants.EMAIL_LOGO_PATH);
+            helper.addInline(EmailConstants.EMAIL_LOGO_CONTENT_ID, image);
 
             javaMailSender.send(message);
         } catch (MessagingException e) {
