@@ -21,5 +21,5 @@ public interface EmailService {
      * @param subject     the subject line of the email
      * @param htmlContent the HTML content of the email body
      */
-    void sendHtmlMessage(String to, String subject, String htmlContent);
+    void sendWelcomeEmail(String to, String subject, String htmlContent);
 }

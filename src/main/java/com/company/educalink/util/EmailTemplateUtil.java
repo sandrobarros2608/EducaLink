@@ -1,5 +1,6 @@
 package com.company.educalink.util;
 
+import com.company.educalink.constant.EmailConstants;
 import com.company.educalink.entity.interfaces.Nameable;
 import org.springframework.core.io.ClassPathResource;
 

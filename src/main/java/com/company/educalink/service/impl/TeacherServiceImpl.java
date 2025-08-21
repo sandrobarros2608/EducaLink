@@ -9,6 +9,8 @@ import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
 import com.company.educalink.util.EmailTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +80,11 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
         return teacherRepository.findAll();
     }
 
+    @Override
+    public Page<Teacher> getAllPaginated(Pageable pageable) {
+        return teacherRepository.findAll(pageable);
+    }
+
     /**
      * Updates an existing {@link Teacher} entity.
      *
@@ -131,6 +138,6 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
                 placeholders
         );
 
-        emailService.sendHtmlMessage(teacher.getEmail(), EmailConstants.EMAIL_REGISTRATION_SUBJECT, formattedText);
+        emailService.sendWelcomeEmail(teacher.getEmail(), EmailConstants.EMAIL_REGISTRATION_SUBJECT, formattedText);
     }
 }

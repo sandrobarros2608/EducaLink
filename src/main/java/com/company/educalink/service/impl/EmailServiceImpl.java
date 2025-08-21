@@ -40,7 +40,7 @@ public class EmailServiceImpl implements EmailService {
      * @throws IllegalStateException if the email could not be sent due to a messaging error
      */
     @Override
-    public void sendHtmlMessage(String to, String subject, String htmlContent) {
+    public void sendWelcomeEmail(String to, String subject, String htmlContent) {
 
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
