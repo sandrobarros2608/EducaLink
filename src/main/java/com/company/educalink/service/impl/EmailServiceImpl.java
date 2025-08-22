@@ -58,4 +58,23 @@ public class EmailServiceImpl implements EmailService {
             throw new IllegalStateException("No se pudo enviar el correo", e);
         }
     }
+
+    @Override
+    public void sendEmailAssignmentTeacher(String to, String subject, String htmlContent) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(EmailConstants.EMAIL_FROM_TO);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+            ClassPathResource image = new ClassPathResource(EmailConstants.EMAIL_LOGO_PATH);
+            helper.addInline(EmailConstants.EMAIL_LOGO_CONTENT_ID, image);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            throw new IllegalStateException("No se pudo enviar el correo", e);
+        }
+    }
 }
