@@ -6,6 +6,7 @@ import com.company.educalink.exception.custom.ResourceNotFoundException;
 import com.company.educalink.repository.TeacherRepository;
 import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
+import com.company.educalink.util.PasswordEncoderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,8 +49,9 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
         if (teacherEmail.isPresent()) {
             throw new DuplicateEmailException();
         }
-
+        teacher.setPassword(PasswordEncoderUtil.hashPassword(teacher.getPassword()));
         emailService.buildEmailSendRegister(teacher);
+
         return teacherRepository.save(teacher);
     }
 

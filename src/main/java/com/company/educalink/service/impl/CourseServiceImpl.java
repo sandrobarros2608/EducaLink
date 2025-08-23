@@ -3,7 +3,9 @@ package com.company.educalink.service.impl;
 import com.company.educalink.entity.Course;
 import com.company.educalink.entity.Student;
 import com.company.educalink.entity.Teacher;
+import com.company.educalink.entity.dto.CourseDto;
 import com.company.educalink.exception.custom.ResourceNotFoundException;
+import com.company.educalink.mapper.CourseMapper;
 import com.company.educalink.repository.CourseRepository;
 import com.company.educalink.repository.StudentRepository;
 import com.company.educalink.repository.TeacherRepository;
@@ -13,6 +15,8 @@ import com.company.educalink.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +81,14 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.save(existingCourse);
     }
 
+    @Override
+    public List<CourseDto> getAllWithRelations() {
+        return courseRepository.findAll()
+                .stream()
+                .map(CourseMapper::toDTO)
+                .toList();
+    }
+
     /**
      * Finds a course by its ID.
      *
@@ -98,6 +110,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional(readOnly = true)
     @Override
     public List<Course> getAll() {
+
         return courseRepository.findAll();
     }
 

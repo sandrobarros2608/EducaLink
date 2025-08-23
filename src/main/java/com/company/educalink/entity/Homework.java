@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -20,5 +21,11 @@ public class Homework {
 
     private String content;
 
-    private File file;
+//    private File file;
+
+    private LocalDateTime dueDate;
+
+
+
+
 }

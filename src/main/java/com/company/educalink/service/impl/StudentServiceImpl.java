@@ -8,6 +8,7 @@ import com.company.educalink.repository.GradeRepository;
 import com.company.educalink.repository.StudentRepository;
 import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
+import com.company.educalink.util.PasswordEncoderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,7 +60,7 @@ public class StudentServiceImpl implements GenericService<Student, Long> {
         if (studentEmail.isPresent()) {
             throw new DuplicateEmailException();
         }
-
+        student.setPassword(PasswordEncoderUtil.hashPassword(student.getPassword()));
         Grade grade = gradeRepository.findById(student.getGrade().getId())
                 .orElseThrow(() -> new ResourceNotFoundException(Grade.class, student.getGrade().getId()));
 
