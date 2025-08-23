@@ -1,5 +1,8 @@
 package com.company.educalink.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 /**
@@ -35,6 +38,8 @@ public interface GenericService<T, ID> {
      * @return a list of all entities
      */
     List<T> getAll();
+
+    Page<T> getAllPaginated(Pageable pageable);
 
     /**
      * Updates an existing entity.

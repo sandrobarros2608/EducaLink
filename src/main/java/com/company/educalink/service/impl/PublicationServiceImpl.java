@@ -7,6 +7,8 @@ import com.company.educalink.repository.PublicationRepository;
 import com.company.educalink.repository.TeacherRepository;
 import com.company.educalink.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +76,11 @@ public class PublicationServiceImpl implements GenericService<Publication, Long>
     @Override
     public List<Publication> getAll() {
         return publicationRepository.findAll();
+    }
+
+    @Override
+    public Page<Publication> getAllPaginated(Pageable pageable) {
+        return null;
     }
 
     /**

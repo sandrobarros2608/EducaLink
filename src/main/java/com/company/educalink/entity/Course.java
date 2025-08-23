@@ -1,10 +1,14 @@
 package com.company.educalink.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -23,9 +27,26 @@ public class Course {
     @Min(value = 5, message = "The limit of students must be at least 5")
     private Integer limitStudents = 5;
 
-    /* ManyToOne with Teacher. */
-    @NotNull(message = "The Teacher is required")
-    @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
+    /* ManyToMany with Teacher. */
+    @ManyToMany
+    @JoinTable(
+            name = "course_teacher",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns =  @JoinColumn(name = "teacher_id")
+    )
+    /* Temporal Solution */
+    @JsonIgnore
+    private Set<Teacher> teachers = new HashSet<>();
+
+    /* ManyToMany with Student. */
+    @ManyToMany
+    @JoinTable(
+            name = "course_student",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    /* Temporal Solution */
+    @JsonIgnore
+    private Set<Student> students = new HashSet<>();
+
 }

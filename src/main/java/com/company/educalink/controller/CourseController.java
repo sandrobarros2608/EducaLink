@@ -1,6 +1,7 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Course;
+import com.company.educalink.service.CourseService;
 import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,7 +31,7 @@ public class    CourseController {
      * Injected service to handle course operations.
      */
     @Autowired
-    private GenericService<Course, Long> genericService;
+    private CourseService courseService;
 
     /**
      * Creates a new course.
@@ -44,7 +45,7 @@ public class    CourseController {
     @Operation(summary = "Create a new course", description = "Creates a new course associated with an existing teacher.")
     @PostMapping
     public ResponseEntity<Course> saveCourse(@Valid @RequestBody Course course) {
-        Course savedCourse = genericService.save(course);
+        Course savedCourse = courseService.save(course);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCourse);
     }
 
@@ -57,7 +58,7 @@ public class    CourseController {
     @Operation(summary = "Retrieve a course by ID", description = "Fetches a specific course by its ID.")
     @GetMapping("/{id}")
     public ResponseEntity<Course> findById(@PathVariable Long id) {
-        Course courseId = genericService.findById(id);
+        Course courseId = courseService.findById(id);
         return ResponseEntity.ok(courseId);
     }
 
@@ -69,7 +70,7 @@ public class    CourseController {
     @Operation(summary = "Retrieve all courses", description = "Fetches all courses without pagination.")
     @GetMapping
     public ResponseEntity<List<Course>> getAll() {
-        List<Course> courseList = genericService.getAll();
+        List<Course> courseList = courseService.getAll();
         return ResponseEntity.ok(courseList);
     }
 
@@ -83,8 +84,20 @@ public class    CourseController {
     @Operation(summary = "Update a course", description = "Updates a specific course by its ID.")
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable Long id, @Valid @RequestBody Course course) {
-        Course updatedCourse = genericService.update(id, course);
+        Course updatedCourse = courseService.update(id, course);
         return ResponseEntity.ok(updatedCourse);
+    }
+
+    @PutMapping("/{courseId}/teacher/{teacherId}")
+    public ResponseEntity<Course> assignTeacher(@PathVariable Long courseId, @PathVariable Long teacherId) {
+        Course savedCourseTeacher = courseService.assignTeacher(courseId, teacherId);
+        return ResponseEntity.ok(savedCourseTeacher);
+    }
+
+    @PutMapping("/{courseId}/student/{studentId}")
+    public ResponseEntity<Course> assignStudent(@PathVariable Long courseId, @PathVariable Long studentId) {
+        Course savedCourseStudent = courseService.assignStudent(courseId, studentId);
+        return ResponseEntity.ok(savedCourseStudent);
     }
 
     /**
@@ -96,7 +109,7 @@ public class    CourseController {
     @Operation(summary = "Delete a course", description = "Deletes a specific course by its ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        genericService.deleteById(id);
+        courseService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
