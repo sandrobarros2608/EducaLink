@@ -17,15 +17,22 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * Implementation of the {@link EmailService} interface for sending HTML email messages.
+ * Implementation of the {@link EmailService} interface for sending HTML-formatted emails.
  * <p>
- * This service uses Spring's {@link JavaMailSender} to construct and send
- * rich-text emails with embedded images (like the EducaLink logo).
+ * This service leverages Spring's {@link JavaMailSender} to create and send
+ * emails that support HTML content and inline resources (such as images).
  * </p>
  *
- * The method includes exception handling to manage possible issues when sending emails.
+ * <p><b>Responsibilities:</b></p>
+ * <ul>
+ *   <li>Sending welcome emails to new students and teachers</li>
+ *   <li>Sending assignment notification emails to teachers</li>
+ *   <li>Building and formatting registration emails based on entity type</li>
+ *   <li>Handling and wrapping messaging exceptions</li>
+ * </ul>
  *
- * @author Sandro Barros
+ * @author
+ *   Sandro Barros
  * @since 1.0.0
  */
 @Service
@@ -35,15 +42,16 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSender javaMailSender;
 
     /**
-     * Sends an HTML email message with the provided recipient, subject, and content.
+     * Sends a welcome email with HTML content to the specified recipient.
      * <p>
-     * The message includes the embedded EducaLink logo, and supports UTF-8 encoding.
+     * This email typically includes the EducaLink logo as an inline image and
+     * ensures proper rendering by using UTF-8 encoding.
      * </p>
      *
-     * @param to           the recipient's email address
-     * @param subject      the subject line of the email
-     * @param htmlContent  the HTML-formatted content of the email
-     * @throws IllegalStateException if the email could not be sent due to a messaging error
+     * @param to          the recipient's email address
+     * @param subject     the subject line of the email
+     * @param htmlContent the HTML-formatted body of the email
+     * @throws IllegalStateException if the email could not be sent due to a {@link MessagingException}
      */
     @Override
     public void sendWelcomeEmail(String to, String subject, String htmlContent) {
@@ -65,6 +73,18 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    /**
+     * Sends an email to notify a teacher of their assignment to a course.
+     * <p>
+     * The email body should be provided in HTML format and will include
+     * the EducaLink logo as an inline resource.
+     * </p>
+     *
+     * @param to          the teacher's email address
+     * @param subject     the subject line of the notification
+     * @param htmlContent the HTML-formatted body of the email
+     * @throws IllegalStateException if the email could not be sent due to a {@link MessagingException}
+     */
     @Override
     public void sendEmailAssignmentTeacher(String to, String subject, String htmlContent) {
         try {
@@ -84,6 +104,22 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    /**
+     * Builds and sends a registration welcome email for supported entity types.
+     * <p>
+     * This method determines the entity type (e.g., {@link Student} or {@link Teacher}),
+     * prepares the email template by replacing placeholders, and then sends the email.
+     * </p>
+     *
+     * <p><b>Supported entities:</b></p>
+     * <ul>
+     *     <li>{@link Student}</li>
+     *     <li>{@link Teacher}</li>
+     * </ul>
+     *
+     * @param entity the entity representing the user being registered
+     * @throws UnsupportedRegistrationEntityException if the entity type is not supported
+     */
     @Override
     public void buildEmailSendRegister(Object entity) {
         Map<String, String> placeholders = EmailUtil.registrationPlaceholdersBuild(entity);

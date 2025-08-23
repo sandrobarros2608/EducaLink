@@ -100,6 +100,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
     }
 
+    /**
+     * Handles cases where an unsupported entity type is provided for email placeholder substitution.
+     * <p>
+     * This occurs when an object that is not a {@link com.company.educalink.entity.Student}
+     * or {@link com.company.educalink.entity.Teacher} is passed to the email template utility.
+     * </p>
+     *
+     * @param ex      the InvalidPlaceholderEntityException thrown
+     * @param request the HTTP request
+     * @return a ResponseEntity with status 422 (Unprocessable Entity) and a structured error response
+     */
     @ExceptionHandler(InvalidPlaceholderEntityException.class)
     public ResponseEntity<ErrorResponseDTO> handlerInvalidPlaceholderEntityException(
             InvalidPlaceholderEntityException ex,
@@ -115,6 +126,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    /**
+     * Handles cases where an unsupported entity type is used for registration email sending.
+     * <p>
+     * This occurs when an entity that is not allowed to receive registration emails (e.g., not a
+     * {@link com.company.educalink.entity.Student} or {@link com.company.educalink.entity.Teacher})
+     * is passed to the email sending service.
+     * </p>
+     *
+     * @param ex      the UnsupportedRegistrationEntityException thrown
+     * @param request the HTTP request
+     * @return a ResponseEntity with status 422 (Unprocessable Entity) and a structured error response
+     */
     @ExceptionHandler(UnsupportedRegistrationEntityException.class)
     public ResponseEntity<ErrorResponseDTO> handlerUnsupportedRegistrationEntityException(
             UnsupportedRegistrationEntityException ex,

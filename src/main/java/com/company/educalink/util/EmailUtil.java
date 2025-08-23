@@ -67,6 +67,19 @@ public class EmailUtil {
         return template;
     }
 
+    /**
+     * Builds a map of placeholders for email templates based on the provided entity type.
+     * <p>
+     * This method inspects the given entity and creates a map of key-value pairs
+     * where each key represents a placeholder name (e.g., {@code {Name}}) and the value
+     * corresponds to the entity's attributes. Currently supports {@link Student} and
+     * {@link Teacher} entities.
+     * </p>
+     *
+     * @param entity the entity from which to build placeholders (must be a {@code Student} or {@code Teacher})
+     * @return a map of placeholders and their corresponding values
+     * @throws InvalidPlaceholderEntityException if the provided entity type is not supported
+     */
     public static Map<String, String> registrationPlaceholdersBuild(Object entity) {
         if (entity instanceof Student student) {
             return Map.of("Name", student.getName() + " " + student.getLastName());

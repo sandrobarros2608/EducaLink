@@ -94,6 +94,12 @@ public class StudentServiceImpl implements GenericService<Student, Long> {
         return studentRepository.findAll();
     }
 
+    /**
+     * Retrieves a paginated list of students.
+     *
+     * @param pageable the pagination information, including page number, size, and sorting
+     * @return a {@link Page} containing the students for the specified page
+     */
     @Override
     public Page<Student> getAllPaginated(Pageable pageable) {
         return null;

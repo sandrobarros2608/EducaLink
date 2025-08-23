@@ -65,6 +65,12 @@ public class GradeServiceImpl implements GenericService<Grade, Long> {
         return gradeRepository.findAll();
     }
 
+    /**
+     * Retrieves a paginated list of grades.
+     *
+     * @param pageable the pagination information, including page number, size, and sorting
+     * @return a {@link Page} containing the grades for the specified page
+     */
     @Override
     public Page<Grade> getAllPaginated(Pageable pageable) {
         return null;
