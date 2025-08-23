@@ -1,6 +1,8 @@
 package com.company.educalink.controller;
 
 import com.company.educalink.entity.Course;
+import com.company.educalink.entity.dto.CourseDto;
+import com.company.educalink.mapper.CourseMapper;
 import com.company.educalink.service.CourseService;
 import com.company.educalink.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -69,10 +71,18 @@ public class    CourseController {
      */
     @Operation(summary = "Retrieve all courses", description = "Fetches all courses without pagination.")
     @GetMapping
-    public ResponseEntity<List<Course>> getAll() {
-        List<Course> courseList = courseService.getAll();
-        return ResponseEntity.ok(courseList);
+    public ResponseEntity<List<CourseDto>> getAllCoursesWithRelations() {
+        List<CourseDto> dtos = courseService.getAllWithRelations();
+        return ResponseEntity.ok(dtos);
     }
+
+
+//
+//    @GetMapping
+//    public ResponseEntity<List<Course>> getAll() {
+//        List<Course> courseList = courseService.getAll();
+//        return ResponseEntity.ok(courseList);
+//    }
 
     /**
      * Updates an existing course.

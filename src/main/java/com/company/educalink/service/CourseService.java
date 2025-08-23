@@ -1,6 +1,9 @@
 package com.company.educalink.service;
 
 import com.company.educalink.entity.Course;
+import com.company.educalink.entity.dto.CourseDto;
+
+import java.util.List;
 
 /**
  * Service interface for managing {@link Course} entities.
@@ -40,4 +43,6 @@ public interface CourseService extends GenericService<Course, Long> {
      * @return the updated {@link Course} with the assigned student
      */
     Course assignStudent(Long courseId, Long studentId);
+
+    List<CourseDto> getAllWithRelations();
 }
