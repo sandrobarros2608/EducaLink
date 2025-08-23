@@ -79,6 +79,12 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
         return teacherRepository.findAll();
     }
 
+    /**
+     * Retrieves a paginated list of teachers.
+     *
+     * @param pageable the pagination information, including page number, size, and sorting
+     * @return a {@link Page} containing the teachers for the specified page
+     */
     @Override
     public Page<Teacher> getAllPaginated(Pageable pageable) {
         return teacherRepository.findAll(pageable);

@@ -75,6 +75,26 @@ public class TeacherController {
     }
 
     /**
+     * Retrieves a paginated list of teachers.
+     *
+     * @param page   the page number to retrieve (default is 0)
+     * @param size   the number of records per page (default is 10)
+     * @param sortBy the field used to sort the results (default is "id")
+     * @return HTTP 200 with a paginated list of teachers
+     */
+    @Operation(summary = "Get all teachers (paginated)", description = "Retrieves a paginated and sortable list of teachers.")
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<Teacher>> getAllPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Teacher> teachers = genericService.getAllPaginated(pageable);
+        return ResponseEntity.ok(teachers);
+    }
+
+    /**
      * Updates an existing teacher.
      *
      * @param id the ID of the teacher to update
@@ -100,16 +120,4 @@ public class TeacherController {
         genericService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/paginated")
-    public ResponseEntity<Page<Teacher>> getAllPaginated(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy
-    ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        Page<Teacher> teachers = genericService.getAllPaginated(pageable);
-        return ResponseEntity.ok(teachers);
-    }
-
 }

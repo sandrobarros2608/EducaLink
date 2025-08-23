@@ -78,6 +78,12 @@ public class PublicationServiceImpl implements GenericService<Publication, Long>
         return publicationRepository.findAll();
     }
 
+    /**
+     * Retrieves a paginated list of publications.
+     *
+     * @param pageable the pagination information, including page number, size, and sorting
+     * @return a {@link Page} containing the publications for the specified page
+     */
     @Override
     public Page<Publication> getAllPaginated(Pageable pageable) {
         return null;

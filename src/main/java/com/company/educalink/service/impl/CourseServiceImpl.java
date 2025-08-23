@@ -61,34 +61,6 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.save(course);
     }
 
-    @Override
-    public Course assignTeacher(Long courseId, Long teacherId) {
-        Course existingCourse = findById(courseId);
-        Teacher existingTeacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new ResourceNotFoundException(Teacher.class, teacherId));
-
-        existingCourse.getTeachers().add(existingTeacher);
-        return courseRepository.save(existingCourse);
-    }
-
-    @Override
-    public Course assignStudent(Long courseId, Long studentId) {
-        Course existingCourse = findById(courseId);
-        Student existingStudent = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException(Student.class, studentId));
-
-        existingCourse.getStudents().add(existingStudent);
-        return courseRepository.save(existingCourse);
-    }
-
-    @Override
-    public List<CourseDto> getAllWithRelations() {
-        return courseRepository.findAll()
-                .stream()
-                .map(CourseMapper::toDTO)
-                .toList();
-    }
-
     /**
      * Finds a course by its ID.
      *
@@ -100,6 +72,15 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course findById(Long id) {
         return courseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Course.class, id));
+    }
+  
+    @Transactional(readOnly = true)
+    @Override
+    public List<CourseDto> getAllWithRelations() {
+        return courseRepository.findAll()
+                .stream()
+                .map(CourseMapper::toDTO)
+                .toList();
     }
 
     /**
@@ -114,6 +95,12 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findAll();
     }
 
+    /**
+     * Retrieves a paginated list of courses.
+     *
+     * @param pageable the pagination information, including page number, size, and sorting
+     * @return a {@link Page} containing the courses for the specified page
+     */
     @Override
     public Page<Course> getAllPaginated(Pageable pageable) {
         return null;
@@ -140,6 +127,50 @@ public class CourseServiceImpl implements CourseService {
         existingCourse.setDescription(course.getDescription());
         existingCourse.setLimitStudents(course.getLimitStudents());
 
+        return courseRepository.save(existingCourse);
+    }
+
+    /**
+     * Assigns a teacher to an existing course.
+     * <p>
+     * This method manages the many-to-many relationship between {@link Course} and {@link Teacher}.
+     * If the teacher is found, it will be added to the course's teacher list.
+     * </p>
+     *
+     * @param courseId  the ID of the course to which the teacher will be assigned
+     * @param teacherId the ID of the teacher to be assigned to the course
+     * @return the updated {@link Course} entity with the assigned teacher
+     * @throws ResourceNotFoundException if the course or teacher is not found
+     */
+    @Override
+    public Course assignTeacher(Long courseId, Long teacherId) {
+        Course existingCourse = findById(courseId);
+        Teacher existingTeacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ResourceNotFoundException(Teacher.class, teacherId));
+
+        existingCourse.getTeachers().add(existingTeacher);
+        return courseRepository.save(existingCourse);
+    }
+
+    /**
+     * Assigns a student to an existing course.
+     * <p>
+     * This method manages the many-to-many relationship between {@link Course} and {@link Student}.
+     * If the student is found, it will be added to the course's student list.
+     * </p>
+     *
+     * @param courseId  the ID of the course to which the student will be assigned
+     * @param studentId the ID of the student to be assigned to the course
+     * @return the updated {@link Course} entity with the assigned student
+     * @throws ResourceNotFoundException if the course or student is not found
+     */
+    @Override
+    public Course assignStudent(Long courseId, Long studentId) {
+        Course existingCourse = findById(courseId);
+        Student existingStudent = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException(Student.class, studentId));
+
+        existingCourse.getStudents().add(existingStudent);
         return courseRepository.save(existingCourse);
     }
 

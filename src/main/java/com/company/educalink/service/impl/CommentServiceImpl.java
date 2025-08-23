@@ -83,6 +83,12 @@ public class CommentServiceImpl implements GenericService<Comment, Long> {
         return commentRepository.findAll();
     }
 
+    /**
+     * Retrieves a paginated list of comments.
+     *
+     * @param pageable the pagination information, including page number, size, and sorting
+     * @return a {@link Page} containing the comments for the specified page
+     */
     @Override
     public Page<Comment> getAllPaginated(Pageable pageable) {
         return null;
