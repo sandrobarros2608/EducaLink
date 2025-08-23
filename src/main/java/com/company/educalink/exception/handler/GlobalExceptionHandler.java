@@ -101,4 +101,34 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(InvalidPlaceholderEntityException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerInvalidPlaceholderEntityException(
+            InvalidPlaceholderEntityException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(UnsupportedRegistrationEntityException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerUnsupportedRegistrationEntityException(
+            UnsupportedRegistrationEntityException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }

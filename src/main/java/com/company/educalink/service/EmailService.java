@@ -24,4 +24,6 @@ public interface EmailService {
     void sendWelcomeEmail(String to, String subject, String htmlContent);
 
     void sendEmailAssignmentTeacher(String to, String subject, String htmlContent);
+
+    void buildEmailSendRegister(Object entity);
 }

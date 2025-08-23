@@ -1,6 +1,5 @@
 package com.company.educalink.entity;
 
-import com.company.educalink.entity.interfaces.Nameable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -16,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Student implements Nameable {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

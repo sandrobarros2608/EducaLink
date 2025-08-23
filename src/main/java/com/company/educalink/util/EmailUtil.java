@@ -1,7 +1,8 @@
 package com.company.educalink.util;
 
-import com.company.educalink.constant.EmailConstants;
-import com.company.educalink.entity.interfaces.Nameable;
+import com.company.educalink.entity.Student;
+import com.company.educalink.entity.Teacher;
+import com.company.educalink.exception.custom.InvalidPlaceholderEntityException;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -13,8 +14,7 @@ import java.util.Map;
 /**
  * Utility class for handling email template loading and placeholder formatting.
  * <p>
- * Provides helper methods to load HTML templates, replace placeholders with actual values,
- * and build default placeholder maps for entities implementing the {@link Nameable} interface.
+ * Provides helper methods to load HTML templates, replace placeholders with actual values
  * </p>
  *
  * This class cannot be instantiated.
@@ -22,12 +22,12 @@ import java.util.Map;
  * @author Sandro Barros
  * @since 1.0.0
  */
-public class EmailTemplateUtil {
+public class EmailUtil {
 
     /**
      * Private constructor to prevent instantiation.
      */
-    private EmailTemplateUtil() {
+    private EmailUtil() {
 
     }
 
@@ -55,7 +55,7 @@ public class EmailTemplateUtil {
      * @param values a map of key-value pairs to replace placeholders in the template
      * @return the formatted template with all placeholders replaced
      */
-    public static String formatRegisterName(String template, Map<String, String> values) {
+    public static String formatTemplate(String template, Map<String, String> values) {
         if (template == null || values == null) {
             return template;
         }
@@ -67,16 +67,17 @@ public class EmailTemplateUtil {
         return template;
     }
 
-    /**
-     * Builds a map of default placeholders for the given entity.
-     * <p>
-     * Currently, it builds a single key-value pair: {@code "Name"} with the full name.
-     *
-     * @param <T> a type that implements {@link Nameable}
-     * @param entity the entity to extract values from
-     * @return a map containing placeholder values
-     */
-    public static <T extends Nameable> Map<String, String> buildPlaceholders(T entity) {
-        return Map.of("Name", entity.getName() + " " + entity.getLastName());
+    public static Map<String, String> registrationPlaceholdersBuild(Object entity) {
+        if (entity instanceof Student student) {
+            return Map.of("Name", student.getName() + " " + student.getLastName());
+        } else if (entity instanceof Teacher teacher) {
+            return Map.of("Name", teacher.getName() + " " + teacher.getLastName());
+        } else {
+            throw new InvalidPlaceholderEntityException(entity.getClass());
+        }
+    }
+
+    public static Map<String, String> assignmentPlaceholdersBuild(Object entity) {
+        throw new UnsupportedOperationException("Method not implement.");
     }
 }

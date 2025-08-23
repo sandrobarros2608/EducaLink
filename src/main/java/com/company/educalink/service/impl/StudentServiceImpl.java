@@ -1,6 +1,5 @@
 package com.company.educalink.service.impl;
 
-import com.company.educalink.constant.EmailConstants;
 import com.company.educalink.entity.Grade;
 import com.company.educalink.entity.Student;
 import com.company.educalink.exception.custom.DuplicateEmailException;
@@ -9,7 +8,6 @@ import com.company.educalink.repository.GradeRepository;
 import com.company.educalink.repository.StudentRepository;
 import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
-import com.company.educalink.util.EmailTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -68,7 +65,7 @@ public class StudentServiceImpl implements GenericService<Student, Long> {
 
         student.setGrade(grade);
 
-        sendWelcomeEmail(student);
+        emailService.buildEmailSendRegister(student);
 
         return studentRepository.save(student);
     }
@@ -140,24 +137,5 @@ public class StudentServiceImpl implements GenericService<Student, Long> {
         Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Student.class, id));
         studentRepository.delete(existingStudent);
-    }
-
-    /**
-     * Sends a welcome HTML email to the newly registered {@link Student}.
-     * <p>
-     * Uses placeholder values within a predefined template to personalize the message.
-     *
-     * @param student the student to whom the email will be sent
-     */
-    public void sendWelcomeEmail(Student student) {
-        Map<String, String> placeholders = EmailTemplateUtil.buildPlaceholders(student);
-
-        String htmlTemplate = EmailTemplateUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_REGISTRATION_PATH);
-
-        String formattedText = EmailTemplateUtil.formatRegisterName(
-                htmlTemplate,
-                placeholders
-        );
-        emailService.sendWelcomeEmail(student.getEmail(), EmailConstants.EMAIL_REGISTRATION_SUBJECT, formattedText);
     }
 }

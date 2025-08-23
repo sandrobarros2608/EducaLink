@@ -1,7 +1,11 @@
 package com.company.educalink.service.impl;
 
 import com.company.educalink.constant.EmailConstants;
+import com.company.educalink.entity.Student;
+import com.company.educalink.entity.Teacher;
+import com.company.educalink.exception.custom.UnsupportedRegistrationEntityException;
 import com.company.educalink.service.EmailService;
+import com.company.educalink.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * Implementation of the {@link EmailService} interface for sending HTML email messages.
@@ -75,6 +81,26 @@ public class EmailServiceImpl implements EmailService {
             javaMailSender.send(message);
         } catch (MessagingException e) {
             throw new IllegalStateException("No se pudo enviar el correo", e);
+        }
+    }
+
+    @Override
+    public void buildEmailSendRegister(Object entity) {
+        Map<String, String> placeholders = EmailUtil.registrationPlaceholdersBuild(entity);
+
+        String htmlTemplate = EmailUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_REGISTRATION_PATH);
+
+        String formattedText = EmailUtil.formatTemplate(
+                htmlTemplate,
+                placeholders
+        );
+
+        if (entity instanceof Student student) {
+            sendWelcomeEmail(student.getEmail(), EmailConstants.EMAIL_REGISTRATION_SUBJECT, formattedText);
+        } else if (entity instanceof Teacher teacher) {
+            sendWelcomeEmail(teacher.getEmail(), EmailConstants.EMAIL_REGISTRATION_SUBJECT, formattedText);
+        } else {
+            throw new UnsupportedRegistrationEntityException(entity.getClass());
         }
     }
 }

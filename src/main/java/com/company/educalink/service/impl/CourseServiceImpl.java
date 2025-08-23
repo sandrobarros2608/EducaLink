@@ -11,7 +11,7 @@ import com.company.educalink.repository.TeacherRepository;
 import com.company.educalink.service.CourseService;
 import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
-import com.company.educalink.util.EmailTemplateUtil;
+import com.company.educalink.util.email.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -148,11 +148,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public void sendEmailAssignmentTeacher(Teacher teacher) {
-        Map<String, String> placeholders = EmailTemplateUtil.buildPlaceholders(teacher);
+        Map<String, String> placeholders = EmailUtil.assignmentPlaceholdersBuild(teacher);
 
-        String htmlTemplate = EmailTemplateUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_ASSIGNMENT_COURSE_PATH);
+        String htmlTemplate = EmailUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_ASSIGNMENT_COURSE_PATH);
 
-        String formattedText = EmailTemplateUtil.formatRegisterName(
+        String formattedText = EmailUtil.formatTemplate(
                 htmlTemplate,
                 placeholders
         );
