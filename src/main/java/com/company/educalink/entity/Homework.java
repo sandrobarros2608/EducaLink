@@ -6,13 +6,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-//@Entity
-//@Data
+import java.io.File;
+
+@Entity
+@Data
 public class Homework {
 
-    /*@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    */
 
+    private String title;
+
+    private String content;
+
+    private File file;
 }
