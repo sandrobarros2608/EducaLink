@@ -2,7 +2,6 @@ package com.company.educalink.exception.handler;
 
 import com.company.educalink.exception.custom.*;
 import com.company.educalink.exception.dto.ErrorResponseDTO;
-import com.company.educalink.exception.dto.ValidationErrorDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +39,9 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
 
-        List<ValidationErrorDTO> validationErrorDTO = ex.getBindingResult().getFieldErrors()
+        List<String> messages = ex.getBindingResult().getFieldErrors()
                 .stream()
-                .map(fieldError -> new ValidationErrorDTO(
-                        fieldError.getField(),
-                        fieldError.getDefaultMessage()))
+                .map(fieldError -> fieldError.getDefaultMessage())
                 .collect(Collectors.toList());
 
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
@@ -52,8 +49,9 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation Failed",
                 request.getRequestURI(),
-                validationErrorDTO
+                messages
         );
+
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }
 
@@ -100,5 +98,35 @@ public class GlobalExceptionHandler {
                 null
         );
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidPlaceholderEntityException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerInvalidPlaceholderEntityException(
+            InvalidPlaceholderEntityException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(UnsupportedRegistrationEntityException.class)
+    public ResponseEntity<ErrorResponseDTO> handlerUnsupportedRegistrationEntityException(
+            UnsupportedRegistrationEntityException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

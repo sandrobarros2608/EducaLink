@@ -1,39 +1,18 @@
 package com.company.educalink.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Data;
 
-import java.time.LocalDate;
-import java.util.List;
-
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+//@Entity
+//@Data
 public class Homework {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    /*@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    private String title;              // Título de la tarea
-    private String description;        // Descripción detallada de la tarea
-    private LocalDate dueDate;         // Fecha límite para entregar la tarea
-    private LocalDate creationDate;    // Fecha en la que fue creada la tarea
-
-    @ManyToOne
-    @JoinColumn(name = "curso_id", nullable = false)
-    private Course course;
-
-    @ManyToOne
-    @JoinColumn(name = "profesor_id", nullable = false)
-    private Teacher teacher;
+    */
 
 }
-

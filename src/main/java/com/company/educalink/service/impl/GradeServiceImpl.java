@@ -5,6 +5,8 @@ import com.company.educalink.exception.custom.ResourceNotFoundException;
 import com.company.educalink.repository.GradeRepository;
 import com.company.educalink.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +63,11 @@ public class GradeServiceImpl implements GenericService<Grade, Long> {
     @Override
     public List<Grade> getAll() {
         return gradeRepository.findAll();
+    }
+
+    @Override
+    public Page<Grade> getAllPaginated(Pageable pageable) {
+        return null;
     }
 
     /**

@@ -1,12 +1,18 @@
 package com.company.educalink.service.impl;
 
 import com.company.educalink.entity.Course;
+import com.company.educalink.entity.Student;
 import com.company.educalink.entity.Teacher;
 import com.company.educalink.exception.custom.ResourceNotFoundException;
 import com.company.educalink.repository.CourseRepository;
+import com.company.educalink.repository.StudentRepository;
 import com.company.educalink.repository.TeacherRepository;
+import com.company.educalink.service.CourseService;
+import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +31,19 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
-public class CourseServiceImpl implements GenericService<Course, Long> {
+public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseRepository courseRepository;
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Creates a new course and assigns it to an existing teacher.
@@ -42,11 +54,27 @@ public class CourseServiceImpl implements GenericService<Course, Long> {
      */
     @Override
     public Course save(Course course) {
-        Teacher teacher = teacherRepository.findById(course.getTeacher().getId())
-                .orElseThrow(() -> new ResourceNotFoundException(Teacher.class, course.getTeacher().getId()));
-
-        course.setTeacher(teacher);
         return courseRepository.save(course);
+    }
+
+    @Override
+    public Course assignTeacher(Long courseId, Long teacherId) {
+        Course existingCourse = findById(courseId);
+        Teacher existingTeacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ResourceNotFoundException(Teacher.class, teacherId));
+
+        existingCourse.getTeachers().add(existingTeacher);
+        return courseRepository.save(existingCourse);
+    }
+
+    @Override
+    public Course assignStudent(Long courseId, Long studentId) {
+        Course existingCourse = findById(courseId);
+        Student existingStudent = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException(Student.class, studentId));
+
+        existingCourse.getStudents().add(existingStudent);
+        return courseRepository.save(existingCourse);
     }
 
     /**
@@ -73,6 +101,11 @@ public class CourseServiceImpl implements GenericService<Course, Long> {
         return courseRepository.findAll();
     }
 
+    @Override
+    public Page<Course> getAllPaginated(Pageable pageable) {
+        return null;
+    }
+
     /**
      * Updates an existing course by its ID.
      * <p>
@@ -92,13 +125,8 @@ public class CourseServiceImpl implements GenericService<Course, Long> {
 
         existingCourse.setName(course.getName());
         existingCourse.setDescription(course.getDescription());
-        if (course.getLimitStudents() != null && course.getLimitStudents() > 4) {
-            existingCourse.setLimitStudents(course.getLimitStudents());
-        }
-        Teacher teacher = teacherRepository.findById(course.getTeacher().getId())
-                .orElseThrow(() -> new ResourceNotFoundException(Teacher.class, course.getTeacher().getId()));
+        existingCourse.setLimitStudents(course.getLimitStudents());
 
-        existingCourse.setTeacher(teacher);
         return courseRepository.save(existingCourse);
     }
 

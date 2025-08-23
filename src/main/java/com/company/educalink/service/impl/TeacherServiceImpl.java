@@ -1,19 +1,18 @@
 package com.company.educalink.service.impl;
 
-import com.company.educalink.constant.EmailConstants;
 import com.company.educalink.entity.Teacher;
 import com.company.educalink.exception.custom.DuplicateEmailException;
 import com.company.educalink.exception.custom.ResourceNotFoundException;
 import com.company.educalink.repository.TeacherRepository;
 import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
-import com.company.educalink.util.EmailTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -50,7 +49,7 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
             throw new DuplicateEmailException();
         }
 
-        sendWelcomeEmail(teacher);
+        emailService.buildEmailSendRegister(teacher);
         return teacherRepository.save(teacher);
     }
 
@@ -76,6 +75,11 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
     @Override
     public List<Teacher> getAll() {
         return teacherRepository.findAll();
+    }
+
+    @Override
+    public Page<Teacher> getAllPaginated(Pageable pageable) {
+        return teacherRepository.findAll(pageable);
     }
 
     /**
@@ -114,23 +118,5 @@ public class TeacherServiceImpl implements GenericService<Teacher, Long> {
         Teacher existingTeacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Teacher.class, id));
         teacherRepository.delete(existingTeacher);
-    }
-
-    /**
-     * Sends a welcome email to the registered {@link Teacher}.
-     *
-     * @param teacher the teacher to whom the email is sent
-     */
-    public void sendWelcomeEmail(Teacher teacher) {
-        Map<String, String> placeholders = EmailTemplateUtil.buildPlaceholders(teacher);
-
-        String htmlTemplate = EmailTemplateUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_REGISTRATION_PATH);
-
-        String formattedText = EmailTemplateUtil.formatRegisterName(
-                htmlTemplate,
-                placeholders
-        );
-
-        emailService.sendHtmlMessage(teacher.getEmail(), EmailConstants.EMAIL_REGISTRATION_SUBJECT, formattedText);
     }
 }

@@ -1,6 +1,5 @@
 package com.company.educalink.entity;
 
-import com.company.educalink.entity.interfaces.Nameable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -9,11 +8,13 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
-public class Teacher implements Nameable {
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,11 +39,10 @@ public class Teacher implements Nameable {
     @Size(min = 10, max = 10, message = "The Phone Number must contain 10 digits")
     private String phoneNumber;
 
-    /* OneToMany with Course. */
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    // Break cycle.
+    /* ManyToMany with Course. */
+    @ManyToMany(mappedBy = "teachers")
     @JsonIgnore
-    private List<Course> courses = new ArrayList<>();
+    private Set<Course> courses = new HashSet<>();
 
     /* OneToMany with Announcement. */
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
