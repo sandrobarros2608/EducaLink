@@ -74,6 +74,12 @@ public class AnnouncementServiceImpl implements GenericService<Announcement, Lon
         return announcementRepository.findAll();
     }
 
+    /**
+     * Retrieves a paginated list of announcements.
+     *
+     * @param pageable the pagination information, including page number, size, and sorting
+     * @return a {@link Page} containing the announcements for the specified page
+     */
     @Override
     public Page<Announcement> getAllPaginated(Pageable pageable) {
         return null;

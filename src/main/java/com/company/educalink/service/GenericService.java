@@ -39,6 +39,12 @@ public interface GenericService<T, ID> {
      */
     List<T> getAll();
 
+    /**
+     * Retrieves entities in a paginated format.
+     *
+     * @param pageable pagination and sorting information
+     * @return a page of entities
+     */
     Page<T> getAllPaginated(Pageable pageable);
 
     /**
