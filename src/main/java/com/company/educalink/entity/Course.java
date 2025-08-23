@@ -6,12 +6,15 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Course {
 
     @Id
@@ -35,7 +38,7 @@ public class Course {
             inverseJoinColumns =  @JoinColumn(name = "teacher_id")
     )
     /* Temporal Solution */
-    @JsonIgnore
+
     private Set<Teacher> teachers = new HashSet<>();
 
     /* ManyToMany with Student. */
@@ -46,7 +49,6 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     /* Temporal Solution */
-    @JsonIgnore
     private Set<Student> students = new HashSet<>();
 
 }
