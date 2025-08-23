@@ -16,5 +16,5 @@ public class ErrorResponseDTO {
     private int status;
     private String error;
     private String path;
-    private List<ValidationErrorDTO> validationErrorDTO;
+    private List<String> details;
 }

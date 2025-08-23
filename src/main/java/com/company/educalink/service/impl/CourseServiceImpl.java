@@ -1,6 +1,5 @@
 package com.company.educalink.service.impl;
 
-import com.company.educalink.constant.EmailConstants;
 import com.company.educalink.entity.Course;
 import com.company.educalink.entity.Student;
 import com.company.educalink.entity.Teacher;
@@ -11,7 +10,6 @@ import com.company.educalink.repository.TeacherRepository;
 import com.company.educalink.service.CourseService;
 import com.company.educalink.service.EmailService;
 import com.company.educalink.service.GenericService;
-import com.company.educalink.util.email.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Service implementation for managing {@link Course} entities.
@@ -128,9 +125,8 @@ public class CourseServiceImpl implements CourseService {
 
         existingCourse.setName(course.getName());
         existingCourse.setDescription(course.getDescription());
-        if (course.getLimitStudents() != null && course.getLimitStudents() > 4) {
-            existingCourse.setLimitStudents(course.getLimitStudents());
-        }
+        existingCourse.setLimitStudents(course.getLimitStudents());
+
         return courseRepository.save(existingCourse);
     }
 
@@ -145,18 +141,5 @@ public class CourseServiceImpl implements CourseService {
         Course existingCourse = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Course.class, id));
         courseRepository.delete(existingCourse);
-    }
-
-    public void sendEmailAssignmentTeacher(Teacher teacher) {
-        Map<String, String> placeholders = EmailUtil.assignmentPlaceholdersBuild(teacher);
-
-        String htmlTemplate = EmailUtil.loadTemplate(EmailConstants.EMAIL_TEMPLATE_ASSIGNMENT_COURSE_PATH);
-
-        String formattedText = EmailUtil.formatTemplate(
-                htmlTemplate,
-                placeholders
-        );
-
-        emailService.sendEmailAssignmentTeacher(teacher.getEmail(), EmailConstants.EMAIL_REGISTRATION_SUBJECT, formattedText);
     }
 }
